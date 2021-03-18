@@ -11,7 +11,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.time.Instant;
 
 @SpringBootTest
 class FastdfsdemoApplicationTests {
@@ -24,7 +23,7 @@ class FastdfsdemoApplicationTests {
         StorageClient1 storageClient1 = new StorageClient1(trackerServer, storageServer);
         NameValuePair[] pairs = null;
         String fileId = storageClient1.upload_file1(
-                "/home/bolitao/下载/416.jpg", "jpg", pairs);
+                "C:\\Users\\tblsy\\OneDrive\\桌面\\006v119zly1gnog2vq6ccj30u00u0471.jpg", "jpg", pairs);
         System.out.println(fileId);
     }
 
@@ -44,9 +43,30 @@ class FastdfsdemoApplicationTests {
     @Test
     void testAntiSteal() throws UnsupportedEncodingException, NoSuchAlgorithmException, MyException {
         int ts = (int) (System.currentTimeMillis() / 1000 + 900);
-        String remoteFilename = "M00/00/00/wKhPg2BO-gGAeSHoAAMQ7sedL08620.jpg";
+        String remoteFilename = "M00/00/00/wKhPg2BTBSeAb3ERAAT2YBE-JU0473.jpg";
         String fastDfsUrl = "http://192.168.79.131:8888/";
         String token = ProtoCommon.getToken(remoteFilename, ts, "bolitao");
         System.out.println(fastDfsUrl + "group1/" + remoteFilename + "?token=" + token + "&ts=" + ts);
+    }
+
+    @Test
+    void testFileInfo() throws IOException, MyException {
+        ClientGlobal.initByProperties("fastdfs-client.properties");
+        TrackerClient trackerClient = new TrackerClient();
+        TrackerServer trackerServer = trackerClient.getConnection();
+        StorageServer storageServer = null;
+        StorageClient1 storageClient1 = new StorageClient1(trackerServer, storageServer);
+        System.out.println(storageClient1.get_file_info("group1", "M00/00/00/wKhPg2BTAsWAM_9gAAT2YBE-JU0174.jpg"));
+        System.out.println(storageClient1.get_file_info1("group1/M00/00/00/wKhPg2BTBSeAb3ERAAT2YBE-JU0473.jpg"));
+    }
+
+    @Test
+    void testDeleteFile() throws IOException, MyException {
+        ClientGlobal.initByProperties("fastdfs-client.properties");
+        TrackerClient trackerClient = new TrackerClient();
+        TrackerServer trackerServer = trackerClient.getConnection();
+        StorageServer storageServer = null;
+        StorageClient1 storageClient1 = new StorageClient1(trackerServer, storageServer);
+        System.out.println(storageClient1.delete_file1("group1/M00/00/00/wKhPg2BTBSeAb3ERAAT2YBE-JU0473.jpg"));
     }
 }
